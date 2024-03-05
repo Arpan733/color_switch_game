@@ -1,3 +1,4 @@
+import 'package:color_switch_game/circle_rotator.dart';
 import 'package:color_switch_game/ground.dart';
 import 'package:color_switch_game/player.dart';
 import 'package:flame/components.dart';
@@ -7,8 +8,15 @@ import 'package:flutter/material.dart';
 
 class MyGame extends FlameGame with TapCallbacks {
   late Player myPlayer;
+  final List<Color> gameColor;
 
-  MyGame()
+  MyGame(
+      {this.gameColor = const [
+        Colors.redAccent,
+        Colors.greenAccent,
+        Colors.blueAccent,
+        Colors.yellowAccent
+      ]})
       : super(
           camera: CameraComponent.withFixedResolution(
             width: 600,
@@ -21,22 +29,10 @@ class MyGame extends FlameGame with TapCallbacks {
 
   @override
   void onMount() {
-    world.add(
-      RectangleComponent(
-        size: Vector2(100, 100),
-        position: Vector2(-100, -100),
-        paint: Paint()..color = Colors.black26,
-      ),
-    );
-    world.add(
-      RectangleComponent(
-        size: Vector2(100, 100),
-        position: Vector2(-100, -200),
-        paint: Paint()..color = Colors.black26,
-      ),
-    );
     world.add(Ground(position: Vector2(0, 400)));
-    world.add(myPlayer = Player());
+    world.add(myPlayer = Player(position: Vector2(0, 250)));
+
+    generateGameComponents();
 
     super.onMount();
   }
@@ -58,5 +54,14 @@ class MyGame extends FlameGame with TapCallbacks {
     myPlayer.jump();
 
     super.onTapDown(event);
+  }
+
+  generateGameComponents() {
+    world.add(
+      CircleRotator(
+        position: Vector2(0, 0),
+        size: Vector2(200, 200),
+      ),
+    );
   }
 }

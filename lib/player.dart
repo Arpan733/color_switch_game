@@ -4,7 +4,10 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with HasGameRef<MyGame> {
-  Player({this.radius = 15});
+  Player({
+    required super.position,
+    this.radius = 15,
+  });
 
   final velocity = Vector2(0, 20);
   final gravity = 980.0;
@@ -13,7 +16,6 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
 
   @override
   void onMount() {
-    position = Vector2.zero();
     size = Vector2.all(radius * 2);
     anchor = Anchor.center;
 
@@ -41,7 +43,7 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
     canvas.drawCircle(
       (size / 2).toOffset(),
       radius,
-      Paint()..color = Colors.yellow,
+      Paint()..color = Colors.yellowAccent,
     );
 
     super.render(canvas);
