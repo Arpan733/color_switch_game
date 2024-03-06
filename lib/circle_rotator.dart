@@ -1,12 +1,14 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:color_switch_game/my_game.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
-class CircleRotator extends PositionComponent with HasGameRef<MyGame> {
+class CircleRotator extends PositionComponent
+    with HasGameRef<MyGame>, CollisionCallbacks {
   CircleRotator({
     required super.position,
     required super.size,
@@ -27,8 +29,8 @@ class CircleRotator extends PositionComponent with HasGameRef<MyGame> {
       add(
         CircleArc(
           color: gameRef.gameColor[i],
-          startAngel: i * sweep,
-          sweepAngel: sweep,
+          startAngle: i * sweep,
+          sweepAngle: sweep,
         ),
       );
     }
@@ -43,47 +45,22 @@ class CircleRotator extends PositionComponent with HasGameRef<MyGame> {
 
     return super.onLoad();
   }
-
-  @override
-  void render(Canvas canvas) {
-    // final radius = (size.x / 2) - thickness;
-
-    // canvas.drawArc(
-    //   size.toRect(),
-    //   0,
-    //   3.13,
-    //   false,
-    //   Paint()
-    //     ..color = Colors.blueAccent
-    //     ..style = PaintingStyle.stroke
-    //     ..strokeWidth = thickness,
-    // );
-
-    // canvas.drawCircle(
-    //   (size / 2).toOffset(),
-    //   radius,
-    //   Paint()
-    //     ..color = Colors.blueAccent
-    //     ..style = PaintingStyle.stroke
-    //     ..strokeWidth = thickness,
-    // );
-
-    super.render(canvas);
-  }
 }
 
 class CircleArc extends PositionComponent with ParentIsA<CircleRotator> {
   final Color color;
-  final double startAngel;
-  final double sweepAngel;
+  final double startAngle;
+  final double sweepAngle;
 
-  CircleArc({required this.color, required this.startAngel, required this.sweepAngel})
+  CircleArc({required this.color, required this.startAngle, required this.sweepAngle})
       : super(anchor: Anchor.center);
 
   @override
   void onMount() {
     size = parent.size;
     position = size / 2;
+
+    addHitBox();
 
     super.onMount();
   }
@@ -92,8 +69,8 @@ class CircleArc extends PositionComponent with ParentIsA<CircleRotator> {
   void render(Canvas canvas) {
     canvas.drawArc(
       size.toRect().deflate(parent.thickness / 2),
-      startAngel,
-      sweepAngel,
+      startAngle,
+      sweepAngle,
       false,
       Paint()
         ..color = color
@@ -102,5 +79,33 @@ class CircleArc extends PositionComponent with ParentIsA<CircleRotator> {
     );
 
     super.render(canvas);
+  }
+
+  addHitBox() {
+    final center = size / 2;
+    final radius = size.x / 2;
+    const precision = 8;
+    final segment = sweepAngle / (precision - 1);
+    List<Vector2> vertices = [];
+
+    for (int i = 0; i < precision; i++) {
+      final thisSegment = startAngle + segment * i;
+      vertices.add(
+        center + Vector2(math.cos(thisSegment), math.sin(thisSegment)) * radius,
+      );
+    }
+
+    for (int i = precision - 1; i >= 0; i--) {
+      final thisSegment = startAngle + segment * i;
+      vertices.add(
+        center +
+            Vector2(math.cos(thisSegment), math.sin(thisSegment)) *
+                (radius - parent.thickness),
+      );
+    }
+
+    add(
+      PolygonHitbox(vertices, collisionType: CollisionType.passive),
+    );
   }
 }
