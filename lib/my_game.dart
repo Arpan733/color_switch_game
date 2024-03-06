@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:color_switch_game/circle_rotator.dart';
 import 'package:color_switch_game/color_changer.dart';
 import 'package:color_switch_game/ground.dart';
@@ -5,13 +7,19 @@ import 'package:color_switch_game/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 
-class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
+class MyGame extends FlameGame
+    with TapCallbacks, HasCollisionDetection, HasDecorator, HasTimeScale {
   late Player myPlayer;
   final List<Color> gameColor;
+  final Vector2 size;
+
+  bool get isPause => timeScale == 0.0;
 
   MyGame({
+    required this.size,
     this.gameColor = const [
       Colors.redAccent,
       Colors.greenAccent,
@@ -20,13 +28,20 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     ],
   }) : super(
           camera: CameraComponent.withFixedResolution(
-            width: 600,
-            height: 1000,
+            width: size.x,
+            height: size.y,
           ),
         );
 
   @override
   Color backgroundColor() => Colors.black54;
+
+  @override
+  FutureOr<void> onLoad() {
+    decorator = PaintDecorator.blur(0);
+
+    return super.onLoad();
+  }
 
   @override
   void onMount() {
@@ -93,5 +108,15 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     }
 
     initializeGame();
+  }
+
+  void pauseGameEngine() {
+    (decorator as PaintDecorator).addBlur(5);
+    timeScale = 0.0;
+  }
+
+  void resumeGameEngine() {
+    (decorator as PaintDecorator).addBlur(0);
+    timeScale = 1.0;
   }
 }

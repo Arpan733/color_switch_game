@@ -19,7 +19,7 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
 
   final velocity = Vector2(0, 20);
   final gravity = 980.0;
-  final jumpSpeed = -300.0;
+  final jumpSpeed = -350.0;
   final double radius;
 
   @override
