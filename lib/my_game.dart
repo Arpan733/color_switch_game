@@ -4,6 +4,7 @@ import 'package:color_switch_game/circle_rotator.dart';
 import 'package:color_switch_game/color_changer.dart';
 import 'package:color_switch_game/ground.dart';
 import 'package:color_switch_game/player.dart';
+import 'package:color_switch_game/start_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -15,6 +16,8 @@ class MyGame extends FlameGame
   late Player myPlayer;
   final List<Color> gameColor;
   final Vector2 size;
+
+  final ValueNotifier<int> score = ValueNotifier(0);
 
   bool get isPause => timeScale == 0.0;
 
@@ -90,6 +93,11 @@ class MyGame extends FlameGame
       ),
     );
     world.add(
+      StarComponent(
+        position: Vector2(0, -100),
+      ),
+    );
+    world.add(
       ColorChanger(
         position: Vector2(0, -300),
       ),
@@ -118,5 +126,9 @@ class MyGame extends FlameGame
   void resumeGameEngine() {
     (decorator as PaintDecorator).addBlur(0);
     timeScale = 1.0;
+  }
+
+  void increaseScore() {
+    score.value++;
   }
 }

@@ -4,6 +4,7 @@ import 'package:color_switch_game/circle_rotator.dart';
 import 'package:color_switch_game/color_changer.dart';
 import 'package:color_switch_game/ground.dart';
 import 'package:color_switch_game/my_game.dart';
+import 'package:color_switch_game/start_component.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -24,11 +25,13 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
 
   @override
   FutureOr<void> onLoad() {
-    add(CircleHitbox(
-      radius: radius,
-      anchor: anchor,
-      collisionType: CollisionType.active,
-    ));
+    add(
+      CircleHitbox(
+        radius: radius,
+        anchor: anchor,
+        collisionType: CollisionType.active,
+      ),
+    );
 
     return super.onLoad();
   }
@@ -77,6 +80,9 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
       if (color != other.color) {
         gameRef.onGameOver();
       }
+    } else if (other is StarComponent) {
+      other.showCollectEffect();
+      gameRef.increaseScore();
     }
 
     super.onCollision(intersectionPoints, other);

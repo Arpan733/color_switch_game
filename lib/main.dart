@@ -57,21 +57,38 @@ class _GamePageState extends State<GamePage> {
                 game: myGame,
               ),
             ),
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  if (myGame.isPause) {
-                    myGame.resumeGameEngine();
-                  } else {
-                    myGame.pauseGameEngine();
-                  }
-                });
-              },
-              icon: Icon(
-                myGame.isPause ? Icons.play_arrow_outlined : Icons.pause_outlined,
-                color: Colors.white,
-                size: 40,
-              ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      if (myGame.isPause) {
+                        myGame.resumeGameEngine();
+                      } else {
+                        myGame.pauseGameEngine();
+                      }
+                    });
+                  },
+                  icon: Icon(
+                    myGame.isPause ? Icons.play_arrow_outlined : Icons.pause_outlined,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+                ValueListenableBuilder(
+                  valueListenable: myGame.score,
+                  builder: (context, value, child) {
+                    return Text(
+                      value.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    );
+                  },
+                )
+              ],
             ),
             if (myGame.isPause)
               const Center(
