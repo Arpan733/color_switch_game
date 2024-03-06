@@ -8,6 +8,7 @@ import 'package:color_switch_game/start_component.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbacks {
@@ -79,10 +80,12 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
     } else if (other is CircleArc) {
       if (color != other.color) {
         gameRef.onGameOver();
+        FlameAudio.play('explosion.wav');
       }
     } else if (other is StarComponent) {
       other.showCollectEffect();
       gameRef.increaseScore();
+      FlameAudio.play('collect.wav');
     }
 
     super.onCollision(intersectionPoints, other);

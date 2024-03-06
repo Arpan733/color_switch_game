@@ -57,48 +57,63 @@ class _GamePageState extends State<GamePage> {
                 game: myGame,
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (myGame.isPause) {
-                        myGame.resumeGameEngine();
-                      } else {
+            if (!myGame.isPause)
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
                         myGame.pauseGameEngine();
-                      }
-                    });
-                  },
-                  icon: Icon(
-                    myGame.isPause ? Icons.play_arrow_outlined : Icons.pause_outlined,
-                    color: Colors.white,
-                    size: 40,
+                      });
+                    },
+                    icon: Icon(
+                      myGame.isPause ? Icons.play_arrow_outlined : Icons.pause_outlined,
+                      color: Colors.white,
+                      size: 40,
+                    ),
                   ),
-                ),
-                ValueListenableBuilder(
-                  valueListenable: myGame.score,
-                  builder: (context, value, child) {
-                    return Text(
-                      value.toString(),
-                      style: const TextStyle(
+                  ValueListenableBuilder(
+                    valueListenable: myGame.score,
+                    builder: (context, value, child) {
+                      return Text(
+                        value.toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ),
+            if (myGame.isPause)
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Game Pause!!!',
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 30,
+                        fontSize: 40,
                         fontWeight: FontWeight.w700,
                       ),
-                    );
-                  },
-                )
-              ],
-            ),
-            if (myGame.isPause)
-              const Center(
-                child: Text(
-                  'Game Paused!!!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 40,
-                    fontWeight: FontWeight.w700,
-                  ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          myGame.resumeGameEngine();
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.play_arrow,
+                        color: Colors.white,
+                        size: 100,
+                      ),
+                    ),
+                  ],
                 ),
               ),
           ],
