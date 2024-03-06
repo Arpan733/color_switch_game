@@ -48,6 +48,8 @@ class CircleRotator extends PositionComponent
 }
 
 class CircleArc extends PositionComponent with ParentIsA<CircleRotator> {
+  final circlePaint = Paint();
+
   final Color color;
   final double startAngle;
   final double sweepAngle;
@@ -72,7 +74,7 @@ class CircleArc extends PositionComponent with ParentIsA<CircleRotator> {
       startAngle,
       sweepAngle,
       false,
-      Paint()
+      circlePaint
         ..color = color
         ..style = PaintingStyle.stroke
         ..strokeWidth = parent.thickness,

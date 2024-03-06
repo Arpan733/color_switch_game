@@ -7,6 +7,7 @@ import 'package:color_switch_game/player.dart';
 import 'package:color_switch_game/start_component.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -41,9 +42,24 @@ class MyGame extends FlameGame
   Color backgroundColor() => Colors.black54;
 
   @override
-  FutureOr<void> onLoad() {
+  Future<void> onLoad() async {
     decorator = PaintDecorator.blur(0);
     FlameAudio.bgm.initialize();
+
+    await Flame.images.loadAll(
+      [
+        'tap.png',
+        'animated_star.gif',
+      ],
+    );
+
+    await FlameAudio.audioCache.loadAll(
+      [
+        'background.mp3',
+        'collect.wav',
+        'explosion.wav',
+      ],
+    );
 
     return super.onLoad();
   }
@@ -75,7 +91,7 @@ class MyGame extends FlameGame
   }
 
   initializeGame() {
-    world.add(Ground(position: Vector2(0, 400)));
+    world.add(Ground(position: Vector2(0, 470)));
     world.add(myPlayer = Player(position: Vector2(0, 250)));
     camera.moveTo(Vector2(0, 0));
     FlameAudio.bgm.play('background.mp3');
@@ -84,6 +100,7 @@ class MyGame extends FlameGame
   }
 
   generateGameComponents() {
+    debugMode = true;
     world.add(
       ColorChanger(
         position: Vector2(0, 100),
@@ -119,6 +136,9 @@ class MyGame extends FlameGame
     for (var element in world.children) {
       element.removeFromParent();
     }
+
+    timeScale = 0.0;
+    timeScale = 1.0;
 
     initializeGame();
   }

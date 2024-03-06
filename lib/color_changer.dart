@@ -1,14 +1,21 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:color_switch_game/my_game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class ColorChanger extends PositionComponent with HasGameRef<MyGame>, CollisionCallbacks {
-  ColorChanger({required super.position, this.radius = 20})
-      : super(anchor: Anchor.center, size: Vector2.all(radius * 2));
+  final colorPaint = Paint();
+
+  ColorChanger({
+    required super.position,
+    this.radius = 20,
+  }) : super(
+          anchor: Anchor.center,
+          size: Vector2.all(radius * 2),
+        );
 
   final double radius;
 
@@ -35,7 +42,7 @@ class ColorChanger extends PositionComponent with HasGameRef<MyGame>, CollisionC
         i * sweep,
         sweep,
         true,
-        Paint()..color = gameRef.gameColor[i],
+        colorPaint..color = gameRef.gameColor[i],
       );
     }
 

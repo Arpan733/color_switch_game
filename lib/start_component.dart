@@ -6,6 +6,7 @@ import 'package:flame/particles.dart';
 import 'package:flutter/material.dart';
 
 class StarComponent extends PositionComponent with CollisionCallbacks {
+  final starsPaint = Paint();
   late Sprite starSprite;
 
   StarComponent({required super.position})
@@ -47,6 +48,7 @@ class StarComponent extends PositionComponent with CollisionCallbacks {
         position: position,
         particle: Particle.generate(
           count: 30,
+          lifespan: 0.8,
           generator: (i) => AcceleratedParticle(
             speed: randomVector2(),
             acceleration: randomVector2(),
@@ -56,9 +58,9 @@ class StarComponent extends PositionComponent with CollisionCallbacks {
                 renderer: (c, particle) {
                   starSprite.render(
                     c,
-                    size: (size / 2) * (1 - particle.progress),
+                    size: size * (1 - particle.progress),
                     anchor: Anchor.center,
-                    overridePaint: Paint()
+                    overridePaint: starsPaint
                       ..color = Colors.white.withOpacity(1 - particle.progress),
                   );
                 },

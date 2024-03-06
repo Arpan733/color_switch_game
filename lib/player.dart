@@ -12,6 +12,10 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbacks {
+  final playerPaint = Paint();
+  int c = 0;
+  double oldY = 0.0;
+
   Player({
     required super.position,
     this.radius = 15,
@@ -23,6 +27,8 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
   final gravity = 980.0;
   final jumpSpeed = -350.0;
   final double radius;
+
+  late Ground ground;
 
   @override
   FutureOr<void> onLoad() {
@@ -39,6 +45,8 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
 
   @override
   void onMount() {
+    ground = gameRef.findByKey(ComponentKey.named(Ground.keyName))!;
+
     size = Vector2.all(radius * 2);
     anchor = Anchor.center;
 
@@ -49,13 +57,28 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
   void update(double dt) {
     position += velocity * dt;
 
-    Ground ground = gameRef.findByKey(ComponentKey.named(Ground.keyName))!;
-
-    if (positionOfAnchor(Anchor.bottomCenter).y > ground.position.y) {
+    if (positionOfAnchor(Anchor.bottomCenter).y > ground.position.y && c == 0) {
       velocity.setValues(0, 0);
       position = Vector2(0, ground.position.y - (height / 2));
     } else {
       velocity.y += gravity * dt;
+    }
+
+    print(position);
+    print(oldY);
+
+    if (position.y > 0) {
+      if (position.y < oldY + 500 && position.y > 500) {
+        gameRef.onGameOver();
+      }
+    } else {
+      if (position.y > oldY + 500 && position.y < 0) {
+        gameRef.onGameOver();
+      }
+    }
+
+    if (position.y <= oldY || (position.y < 500 && position.y > 0)) {
+      oldY = position.y;
     }
 
     super.update(dt);
@@ -66,7 +89,7 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
     canvas.drawCircle(
       (size / 2).toOffset(),
       radius,
-      Paint()..color = color,
+      playerPaint..color = color,
     );
 
     super.render(canvas);
@@ -98,6 +121,12 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
 
   jump() {
     velocity.y = jumpSpeed;
+
+    if (c == 0) {
+      ground.removeFromParent();
+    }
+
+    c++;
   }
 
   changeColorToRandom() {
