@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:color_switch_game/circle_rotator.dart';
-import 'package:color_switch_game/color_changer.dart';
-import 'package:color_switch_game/ground.dart';
+import 'package:color_switch_game/explosion_components/circle_rotator.dart';
+import 'package:color_switch_game/explosion_components/one_cross_rotator.dart';
+import 'package:color_switch_game/explosion_components/square_rotator.dart';
 import 'package:color_switch_game/my_game.dart';
-import 'package:color_switch_game/square_rotator.dart';
-import 'package:color_switch_game/start_component.dart';
+import 'package:color_switch_game/other_components/color_changer.dart';
+import 'package:color_switch_game/other_components/ground.dart';
+import 'package:color_switch_game/other_components/start_component.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -104,6 +105,11 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
         FlameAudio.play('explosion.wav');
       }
     } else if (other is SquareLine) {
+      if (color != other.color) {
+        gameRef.onGameOver();
+        FlameAudio.play('explosion.wav');
+      }
+    } else if (other is OneCrossLine) {
       if (color != other.color) {
         gameRef.onGameOver();
         FlameAudio.play('explosion.wav');

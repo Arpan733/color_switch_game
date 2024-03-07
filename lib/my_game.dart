@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:color_switch_game/color_changer.dart';
-import 'package:color_switch_game/ground.dart';
-import 'package:color_switch_game/player.dart';
-import 'package:color_switch_game/square_rotator.dart';
+import 'package:color_switch_game/explosion_components/one_cross_rotator.dart';
+import 'package:color_switch_game/other_components/color_changer.dart';
+import 'package:color_switch_game/other_components/ground.dart';
+import 'package:color_switch_game/other_components/player.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
@@ -106,9 +106,9 @@ class MyGame extends FlameGame
       ),
     );
     world.add(
-      SquareRotator(
+      OneCrossRotator(
         position: Vector2(0, -200),
-        size: Vector2(200, 200),
+        size: Vector2(150, 150),
       ),
     );
   }
