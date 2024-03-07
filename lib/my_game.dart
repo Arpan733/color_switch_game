@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:color_switch_game/circle_rotator.dart';
 import 'package:color_switch_game/color_changer.dart';
 import 'package:color_switch_game/ground.dart';
 import 'package:color_switch_game/player.dart';
-import 'package:color_switch_game/start_component.dart';
+import 'package:color_switch_game/square_rotator.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/flame.dart';
@@ -107,37 +106,22 @@ class MyGame extends FlameGame
       ),
     );
     world.add(
-      CircleRotator(
-        position: Vector2(0, -100),
-        size: Vector2(200, 200),
-      ),
-    );
-    world.add(
-      StarComponent(
-        position: Vector2(0, -100),
-      ),
-    );
-    world.add(
-      ColorChanger(
-        position: Vector2(0, -300),
-      ),
-    );
-    world.add(
-      CircleRotator(
-        position: Vector2(0, -500),
+      SquareRotator(
+        position: Vector2(0, -200),
         size: Vector2(200, 200),
       ),
     );
   }
 
   void onGameOver() {
+    timeScale = 0.0;
+
     FlameAudio.bgm.stop();
     score.value = 0;
     for (var element in world.children) {
       element.removeFromParent();
     }
 
-    timeScale = 0.0;
     timeScale = 1.0;
 
     initializeGame();

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class ColorChanger extends PositionComponent with HasGameRef<MyGame>, CollisionCallbacks {
   final colorPaint = Paint();
+  List<Color> colors = [];
 
   ColorChanger({
     required super.position,
@@ -21,12 +22,17 @@ class ColorChanger extends PositionComponent with HasGameRef<MyGame>, CollisionC
 
   @override
   FutureOr<void> onLoad() {
-    add(CircleHitbox(
-      radius: radius,
-      anchor: anchor,
-      position: size / 2,
-      collisionType: CollisionType.passive,
-    ));
+    colors = gameRef.gameColor.map((e) => e).toList();
+    colors.shuffle();
+
+    add(
+      CircleHitbox(
+        radius: radius,
+        anchor: anchor,
+        position: size / 2,
+        collisionType: CollisionType.passive,
+      ),
+    );
 
     return super.onLoad();
   }
@@ -34,15 +40,15 @@ class ColorChanger extends PositionComponent with HasGameRef<MyGame>, CollisionC
   @override
   void render(Canvas canvas) {
     double circle = math.pi * 2;
-    final sweep = circle / gameRef.gameColor.length;
+    final sweep = circle / colors.length;
 
-    for (int i = 0; i < gameRef.gameColor.length; i++) {
+    for (int i = 0; i < colors.length; i++) {
       canvas.drawArc(
         size.toRect(),
         i * sweep,
         sweep,
         true,
-        colorPaint..color = gameRef.gameColor[i],
+        colorPaint..color = colors[i],
       );
     }
 

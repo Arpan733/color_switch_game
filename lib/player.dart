@@ -4,6 +4,7 @@ import 'package:color_switch_game/circle_rotator.dart';
 import 'package:color_switch_game/color_changer.dart';
 import 'package:color_switch_game/ground.dart';
 import 'package:color_switch_game/my_game.dart';
+import 'package:color_switch_game/square_rotator.dart';
 import 'package:color_switch_game/start_component.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -64,9 +65,6 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
       velocity.y += gravity * dt;
     }
 
-    print(position);
-    print(oldY);
-
     if (position.y > 0) {
       if (position.y < oldY + 500 && position.y > 500) {
         gameRef.onGameOver();
@@ -101,6 +99,11 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
       other.removeFromParent();
       changeColorToRandom();
     } else if (other is CircleArc) {
+      if (color != other.color) {
+        gameRef.onGameOver();
+        FlameAudio.play('explosion.wav');
+      }
+    } else if (other is SquareLine) {
       if (color != other.color) {
         gameRef.onGameOver();
         FlameAudio.play('explosion.wav');

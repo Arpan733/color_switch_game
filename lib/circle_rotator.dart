@@ -22,13 +22,15 @@ class CircleRotator extends PositionComponent
 
   @override
   FutureOr<void> onLoad() {
+    List<Color> color = gameRef.gameColor.map((e) => e).toList();
+    color.shuffle();
     double circle = math.pi * 2;
-    final sweep = circle / gameRef.gameColor.length;
+    final sweep = circle / color.length;
 
-    for (int i = 0; i < gameRef.gameColor.length; i++) {
+    for (int i = 0; i < color.length; i++) {
       add(
         CircleArc(
-          color: gameRef.gameColor[i],
+          color: color[i],
           startAngle: i * sweep,
           sweepAngle: sweep,
         ),
