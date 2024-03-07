@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:color_switch_game/explosion_components/circle_rotator.dart';
+import 'package:color_switch_game/explosion_components/double_cross_rotator.dart';
 import 'package:color_switch_game/explosion_components/one_cross_rotator.dart';
 import 'package:color_switch_game/explosion_components/square_rotator.dart';
 import 'package:color_switch_game/my_game.dart';
@@ -68,11 +69,15 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
 
     if (position.y > 0) {
       if (position.y < oldY + 500 && position.y > 500) {
+        gameRef.isGameOver = true;
         gameRef.onGameOver();
+        gameRef.isGameOver = false;
       }
     } else {
       if (position.y > oldY + 500 && position.y < 0) {
+        gameRef.isGameOver = true;
         gameRef.onGameOver();
+        gameRef.isGameOver = false;
       }
     }
 
@@ -99,21 +104,34 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
     if (other is ColorChanger) {
       other.removeFromParent();
       changeColorToRandom();
-    } else if (other is CircleArc) {
+    } else if (other is CircleArc && !gameRef.isGameOver) {
+      gameRef.isGameOver = true;
       if (color != other.color) {
         gameRef.onGameOver();
         FlameAudio.play('explosion.wav');
       }
-    } else if (other is SquareLine) {
+      gameRef.isGameOver = false;
+    } else if (other is SquareLine && !gameRef.isGameOver) {
+      gameRef.isGameOver = true;
       if (color != other.color) {
         gameRef.onGameOver();
         FlameAudio.play('explosion.wav');
       }
-    } else if (other is OneCrossLine) {
+      gameRef.isGameOver = false;
+    } else if (other is OneCrossLine && !gameRef.isGameOver) {
+      gameRef.isGameOver = true;
       if (color != other.color) {
         gameRef.onGameOver();
         FlameAudio.play('explosion.wav');
       }
+      gameRef.isGameOver = false;
+    } else if (other is DoubleOneCrossLine && !gameRef.isGameOver) {
+      gameRef.isGameOver = true;
+      if (color != other.color) {
+        gameRef.onGameOver();
+        FlameAudio.play('explosion.wav');
+      }
+      gameRef.isGameOver = false;
     } else if (other is StarComponent) {
       other.showCollectEffect();
       gameRef.increaseScore();

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:color_switch_game/explosion_components/one_cross_rotator.dart';
+import 'package:color_switch_game/explosion_components/double_cross_rotator.dart';
 import 'package:color_switch_game/other_components/color_changer.dart';
 import 'package:color_switch_game/other_components/ground.dart';
 import 'package:color_switch_game/other_components/player.dart';
@@ -17,6 +17,7 @@ class MyGame extends FlameGame
   late Player myPlayer;
   final List<Color> gameColor;
   final Vector2 size;
+  bool isGameOver = false;
 
   final ValueNotifier<int> score = ValueNotifier(0);
 
@@ -106,25 +107,34 @@ class MyGame extends FlameGame
       ),
     );
     world.add(
-      OneCrossRotator(
+      DoubleCrossRotator(
         position: Vector2(0, -200),
-        size: Vector2(150, 150),
+        size: Vector2(300, 150),
       ),
     );
   }
 
   void onGameOver() {
-    timeScale = 0.0;
+    if (isGameOver) {
+      FlameAudio.bgm.stop();
+      pauseGameEngine();
+      score.value = 0;
 
-    FlameAudio.bgm.stop();
-    score.value = 0;
-    for (var element in world.children) {
-      element.removeFromParent();
+      if (world.children.isNotEmpty) {
+        for (var element in world.children) {
+          if (world.children.contains(element)) {
+            try {
+              element.removeFromParent();
+            } catch (e) {
+              print(e);
+            }
+          }
+        }
+      }
+
+      resumeGameEngine();
+      initializeGame();
     }
-
-    timeScale = 1.0;
-
-    initializeGame();
   }
 
   void pauseGameEngine() {

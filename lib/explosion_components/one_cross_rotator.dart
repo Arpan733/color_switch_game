@@ -62,7 +62,7 @@ class OneCrossRotator extends PositionComponent
             ReverseLinearEffectController(
               5,
             ),
-            speed: 2.5,
+            speed: rotationSpeed,
           ),
         ),
       ),
