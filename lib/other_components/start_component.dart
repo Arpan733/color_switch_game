@@ -13,11 +13,14 @@ class StarComponent extends PositionComponent with CollisionCallbacks {
       : super(
           size: Vector2(30, 30),
           anchor: Anchor.center,
+          key: ComponentKey.named(
+              (DateTime.now().microsecondsSinceEpoch + Random().nextInt(10000))
+                  .toString()),
         );
 
   @override
   Future<void> onLoad() async {
-    starSprite = await Sprite.load('animated_star.gif');
+    starSprite = await Sprite.load('star.png');
 
     add(CircleHitbox(
       radius: size.x / 2,

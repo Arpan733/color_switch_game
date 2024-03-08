@@ -145,6 +145,7 @@ class DoubleOneCrossLine extends PositionComponent
         RectangleHitbox(
           size: s,
           position: p,
+          collisionType: CollisionType.passive,
         ),
       );
     }

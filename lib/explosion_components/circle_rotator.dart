@@ -37,13 +37,15 @@ class CircleRotator extends PositionComponent
       );
     }
 
-    add(RotateEffect.to(
-      math.pi * 2,
-      EffectController(
-        infinite: true,
-        speed: rotationSpeed,
+    add(
+      RotateEffect.to(
+        math.pi * 2,
+        EffectController(
+          infinite: true,
+          speed: rotationSpeed,
+        ),
       ),
-    ));
+    );
 
     return super.onLoad();
   }

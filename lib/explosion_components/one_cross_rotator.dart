@@ -88,6 +88,7 @@ class OneCrossLine extends PositionComponent with ParentIsA<OneCrossRotator> {
       RectangleHitbox(
         size: s,
         position: p,
+        collisionType: CollisionType.passive,
       ),
     );
 

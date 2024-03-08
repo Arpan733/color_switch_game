@@ -59,6 +59,7 @@ class _GamePageState extends State<GamePage> {
             ),
             if (!myGame.isPause)
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   IconButton(
                     onPressed: () {
@@ -84,7 +85,26 @@ class _GamePageState extends State<GamePage> {
                         ),
                       );
                     },
-                  )
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 40,
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            myGame.isGameOver = true;
+                            myGame.onGameOver();
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.restart_alt_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             if (myGame.isPause)

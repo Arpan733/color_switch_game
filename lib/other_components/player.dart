@@ -60,7 +60,7 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
   void update(double dt) {
     position += velocity * dt;
 
-    if (positionOfAnchor(Anchor.bottomCenter).y > ground.position.y && c == 0) {
+    if (positionOfAnchor(Anchor.bottomCenter).y > ground.position.y) {
       velocity.setValues(0, 0);
       position = Vector2(0, ground.position.y - (height / 2));
     } else {
@@ -136,6 +136,7 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
       other.showCollectEffect();
       gameRef.increaseScore();
       FlameAudio.play('collect.wav');
+      gameRef.checkToGenerateNextBatch(starComponent: other);
     }
 
     super.onCollision(intersectionPoints, other);
@@ -148,12 +149,6 @@ class Player extends PositionComponent with HasGameRef<MyGame>, CollisionCallbac
 
   jump() {
     velocity.y = jumpSpeed;
-
-    if (c == 0) {
-      ground.removeFromParent();
-    }
-
-    c++;
   }
 
   changeColorToRandom() {

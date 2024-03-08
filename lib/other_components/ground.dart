@@ -26,7 +26,7 @@ class Ground extends PositionComponent {
     tapSprite.render(
       canvas,
       anchor: anchor,
-      position: Vector2(200, -20),
+      position: Vector2(110, 35),
       size: Vector2(50, 50),
     );
 
