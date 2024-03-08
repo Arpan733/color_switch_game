@@ -8,6 +8,7 @@ import 'package:color_switch_game/other_components/color_changer.dart';
 import 'package:color_switch_game/other_components/ground.dart';
 import 'package:color_switch_game/other_components/player.dart';
 import 'package:color_switch_game/other_components/start_component.dart';
+import 'package:color_switch_game/screens/home_screen.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
@@ -18,12 +19,16 @@ import 'package:flame/rendering.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 
+import 'main.dart';
+
 class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, HasDecorator, HasTimeScale {
   late Player myPlayer;
   final List<Color> gameColor;
   final Vector2 size;
   bool isGameOver = false;
+
+  late BuildContext context;
 
   final ValueNotifier<int> score = ValueNotifier(0);
 
@@ -33,6 +38,7 @@ class MyGame extends FlameGame
 
   MyGame({
     required this.size,
+    required this.context,
     this.gameColor = const [
       Colors.redAccent,
       Colors.greenAccent,
@@ -232,6 +238,7 @@ class MyGame extends FlameGame
     if (isGameOver) {
       FlameAudio.bgm.stop();
       pauseGameEngine();
+      s = score.value;
       score.value = 0;
 
       if (world.children.isNotEmpty) {
@@ -247,7 +254,15 @@ class MyGame extends FlameGame
       }
 
       resumeGameEngine();
-      initializeGame();
+
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        ),
+      );
     }
   }
 
